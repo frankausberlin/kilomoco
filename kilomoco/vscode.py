@@ -15,20 +15,14 @@ def create_temporary_user_data_dir(prefix: str = "kilomoco-profile-") -> str:
     return tempfile.mkdtemp(prefix=prefix)
 
 def generate_mode_settings(profile) -> Dict[str, Any]:
-    """Generate VS Code settings dict for the given profile.
+    """Generate VS Code settings dict for the given mode combination profile.
 
     Based on architect research, kilo extension uses 'kilo-code.*' settings keys.
+    Sets model for each mode in the profile combination.
     """
-    settings = {
-        "kilo-code.mode": profile.name,
-    }
-    if profile.model:
-        settings["kilo-code.model"] = profile.model
-    if profile.prompt:
-        settings["kilo-code.prompt"] = profile.prompt
-    # Merge any additional settings from profile.settings
-    if profile.settings:
-        settings.update(profile.settings)
+    settings = {}
+    for mode_name, model_name in profile.modes.items():
+        settings[f"kilo-code.{mode_name}.model"] = model_name
     return settings
 
 def apply_mode_configuration(profile, *, strategy: str = "temp_user_data_dir", workspace: Optional[str] = None) -> str:

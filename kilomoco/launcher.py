@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from .config import default_profiles, ModeProfile
+from .config import default_profiles, ModeCombinationProfile
 from .vscode import apply_mode_configuration, launch_vscode_with_profile
 
 def check_vscode_available() -> bool:

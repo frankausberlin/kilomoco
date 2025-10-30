@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from kilomoco.launcher import check_vscode_available, prepare_and_launch
-from kilomoco.config import ModeProfile
+from kilomoco.config import ModeCombinationProfile
 
 def test_check_vscode_available_true():
     """Test VS Code availability check when code is in PATH."""
@@ -23,7 +23,7 @@ def test_prepare_and_launch_vscode_not_available():
     """Test error handling when VS Code CLI is not available."""
     with patch('kilomoco.launcher.check_vscode_available', return_value=False):
         with pytest.raises(RuntimeError, match="VS Code CLI.*not found"):
-            prepare_and_launch("Code")
+            prepare_and_launch("lopr")
 
 @patch('kilomoco.launcher.launch_vscode_with_profile')
 @patch('kilomoco.launcher.apply_mode_configuration')
@@ -33,7 +33,7 @@ def test_prepare_and_launch_success(mock_check, mock_apply, mock_launch):
     mock_apply.return_value = "/tmp/test-dir"
     mock_launch.return_value = 0
 
-    result = prepare_and_launch("Code")
+    result = prepare_and_launch("lopr")
 
     assert result == 0
     mock_apply.assert_called_once()
@@ -47,7 +47,7 @@ def test_prepare_and_launch_with_workspace(mock_check, mock_apply, mock_launch):
     mock_apply.return_value = "/tmp/test-dir"
     mock_launch.return_value = 0
 
-    result = prepare_and_launch("Code", workspace="/path/to/workspace")
+    result = prepare_and_launch("lopr", workspace="/path/to/workspace")
 
     assert result == 0
     mock_launch.assert_called_once_with("/tmp/test-dir", workspace="/path/to/workspace")
@@ -61,7 +61,7 @@ def test_prepare_and_launch_cleanup_on_error(mock_check, mock_apply, mock_launch
     mock_apply.return_value = "/tmp/test-dir"
 
     with pytest.raises(Exception, match="Launch failed"):
-        prepare_and_launch("Code")
+        prepare_and_launch("lopr")
 
     mock_rmtree.assert_called_once_with("/tmp/test-dir")
 
@@ -70,25 +70,25 @@ def test_cli_profile_argument(capsys):
     import kilomoco.cli as cli
 
     with patch('kilomoco.launcher.prepare_and_launch', return_value=0) as mock_launch:
-        rc = cli.main(["--profile", "Code"])
+        rc = cli.main(["--profile", "lopr"])
         assert rc == 0
-        mock_launch.assert_called_once_with("Code", workspace=None)
+        mock_launch.assert_called_once_with("lopr", workspace=None)
 
 def test_cli_profile_with_workspace(capsys):
     """Test CLI --profile with --workspace argument."""
     import kilomoco.cli as cli
 
     with patch('kilomoco.launcher.prepare_and_launch', return_value=0) as mock_launch:
-        rc = cli.main(["--profile", "Code", "--workspace", "/test/workspace"])
+        rc = cli.main(["--profile", "copr", "--workspace", "/test/workspace"])
         assert rc == 0
-        mock_launch.assert_called_once_with("Code", workspace="/test/workspace")
+        mock_launch.assert_called_once_with("copr", workspace="/test/workspace")
 
 def test_cli_profile_error_handling(capsys):
     """Test CLI error handling for invalid profile."""
     import kilomoco.cli as cli
 
     with patch('kilomoco.launcher.prepare_and_launch', side_effect=ValueError("Invalid profile")):
-        rc = cli.main(["--profile", "Invalid"])
+        rc = cli.main(["--profile", "invalid"])
         assert rc == 1
         captured = capsys.readouterr()
         assert "Error: Invalid profile" in captured.err

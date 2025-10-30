@@ -19,8 +19,9 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.list:
         profiles = default_profiles()
-        for name in sorted(profiles.keys()):
-            print(name)
+        for profile_id in sorted(profiles.keys()):
+            profile = profiles[profile_id]
+            print(f"{profile_id}: {profile.name} - {profile.description}")
         return 0
     elif args.profile:
         # Launch with specified profile
@@ -31,7 +32,7 @@ def main(argv=None):
             print(f"Error: {e}", file=sys.stderr)
             return 1
     # Placeholder for interactive TUI
-    print("kilomoco: interactive TUI not yet implemented. Use --list to see profiles or --profile <name> to launch with a specific profile.")
+    print("kilomoco: interactive TUI not yet implemented. Use --list to see profiles or --profile <id> to launch with a specific profile.")
     return 0
 
 if __name__ == "__main__":

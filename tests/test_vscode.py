@@ -8,7 +8,7 @@ from kilomoco.vscode import (
     apply_mode_configuration,
     _write_json_atomically,
 )
-from kilomoco.config import ModeProfile
+from kilomoco.config import ModeCombinationProfile
 
 def test_create_temporary_user_data_dir():
     """Test temporary directory creation with custom prefix."""
@@ -18,29 +18,53 @@ def test_create_temporary_user_data_dir():
     assert Path(temp_dir).is_dir()
 
 def test_generate_mode_settings_basic():
-    """Test basic mode settings generation."""
-    profile = ModeProfile(name="TestMode", settings={"custom": "value"})
-    settings = generate_mode_settings(profile)
-    assert settings["kilo-code.mode"] == "TestMode"
-    assert settings["custom"] == "value"
-
-def test_generate_mode_settings_with_model_and_prompt():
-    """Test settings generation with model and prompt."""
-    profile = ModeProfile(
-        name="Code",
-        model="gpt-4",
-        prompt="You are a coding assistant",
-        settings={"kilo-code.debug": True}
+    """Test basic mode settings generation for profile combination."""
+    profile = ModeCombinationProfile(
+        id="test",
+        name="Test Profile",
+        description="Test description",
+        modes={
+            "default": "gpt-4",
+            "code": "claude-3",
+            "debug": "gpt-3.5"
+        }
     )
     settings = generate_mode_settings(profile)
-    assert settings["kilo-code.mode"] == "Code"
-    assert settings["kilo-code.model"] == "gpt-4"
-    assert settings["kilo-code.prompt"] == "You are a coding assistant"
-    assert settings["kilo-code.debug"] is True
+    assert settings["kilo-code.default.model"] == "gpt-4"
+    assert settings["kilo-code.code.model"] == "claude-3"
+    assert settings["kilo-code.debug.model"] == "gpt-3.5"
+    assert len(settings) == 3
+
+def test_generate_mode_settings_full_profile():
+    """Test settings generation with all 7 modes."""
+    profile = ModeCombinationProfile(
+        id="full",
+        name="Full Profile",
+        description="Complete profile",
+        modes={
+            "default": "model1",
+            "orchestrator": "model2",
+            "architect": "model3",
+            "code": "model4",
+            "debug": "model5",
+            "ask": "model6",
+            "administrator": "model7"
+        }
+    )
+    settings = generate_mode_settings(profile)
+    assert len(settings) == 7
+    for mode in ["default", "orchestrator", "architect", "code", "debug", "ask", "administrator"]:
+        assert f"kilo-code.{mode}.model" in settings
+        assert settings[f"kilo-code.{mode}.model"] == f"model{['default', 'orchestrator', 'architect', 'code', 'debug', 'ask', 'administrator'].index(mode) + 1}"
 
 def test_apply_mode_configuration_temp_user_data_dir():
     """Test applying configuration with temp user data dir strategy."""
-    profile = ModeProfile(name="TestMode", settings={"test": "value"})
+    profile = ModeCombinationProfile(
+        id="test",
+        name="Test Profile",
+        description="Test",
+        modes={"default": "gpt-4", "code": "claude-3"}
+    )
     temp_dir = apply_mode_configuration(profile, strategy="temp_user_data_dir")
 
     # Check directory structure
@@ -55,12 +79,17 @@ def test_apply_mode_configuration_temp_user_data_dir():
     with open(settings_file, 'r', encoding='utf-8') as f:
         settings = json.load(f)
 
-    assert settings["kilo-code.mode"] == "TestMode"
-    assert settings["test"] == "value"
+    assert settings["kilo-code.default.model"] == "gpt-4"
+    assert settings["kilo-code.code.model"] == "claude-3"
 
 def test_apply_mode_configuration_unsupported_strategy():
     """Test that unsupported strategies raise ValueError."""
-    profile = ModeProfile(name="TestMode")
+    profile = ModeCombinationProfile(
+        id="test",
+        name="Test",
+        description="Test",
+        modes={"default": "gpt-4"}
+    )
     with pytest.raises(ValueError, match="Unsupported strategy"):
         apply_mode_configuration(profile, strategy="unsupported")
 

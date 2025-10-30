@@ -1,0 +1,74 @@
+# Sample modus configurations
+# The ID in the square brackets ([lopr], [copr] etc.) is used to activate the corresponding profile.
+
+Modus-Kombi 1 [lopr]: Low-Price (Economy)
+default: llama-4-maverick
+orchestrator: deepseek-v3.2-exp
+architect: minimax-m2
+code: minimax-m2
+debug: deepseek-v3.1-terminus
+ask: llama-4-maverick
+administrator: deepseek-v3.2-exp 
+
+Modus-Kombi 2 [copr]: Complex-Programming (Agentic Coding)
+default: gpt-5-mini
+orchestrator: claude-sonnet-4.5
+architect: gemini-2.5-pro
+code: qwen3-coder
+debug: claude-haiku-4.5
+ask: glm-4.6
+administrator: glm-4.6 
+
+Modus-Kombi 3 [hiq]: High-Quality (Premium)
+default: gemini-2.5-pro
+orchestrator: claude-sonnet-4.5
+architect: gpt-5
+code: claude-sonnet-4.5
+debug: claude-sonnet-4.5
+ask: gemini-2.5-pro
+administrator: gpt-5 
+
+Modus-Kombi 4 [bas]: Balanced-Speed (speed)
+default: grok-code-fast-1
+orchestrator: gemini-2.5-flash
+architect: gpt-5-mini
+code: grok-code-fast-1
+debug: gemini-2.5-flash
+ask: grok-code-fast-1
+administrator: gemini-2.5-flash 
+
+Modus-Kombi 5 [res]: Repository-Scale (big codebases)
+default: gemini-2.5-flash
+orchestrator: gemini-2.5-pro
+architect: qwen3-max
+code: qwen3-coder
+debug: glm-4.6
+ask: llama-4-maverick
+administrator: qwen3-max 
+
+Modus-Kombi 6 [ags]: Agent-Specialist (Autonome Workflows)
+default: minimax-m2
+orchestrator: claude-sonnet-4.5
+architect: deepseek-v3.1-terminus
+code: glm-4.6
+debug: claude-haiku-4.5
+ask: gpt-5-mini
+administrator: deepseek-v3.1-terminus 
+             
+Modus-Kombi 7 [refo]: Research-Focused (analyse & science)
+default: qwen3-max
+orchestrator: gemini-2.5-pro
+architect: gpt-5
+code: mistral-large
+debug: claude-sonnet-4.5
+ask: gemini-2.5-flash
+administrator: mistral-large 
+
+Modus-Kombi 8 [buco]: Budget-Conscious-Pro (budget and efficiency)
+default: gemini-2.5-flash
+orchestrator: gpt-5-mini
+architect: qwen3-coder
+code: grok-code-fast-1
+debug: claude-haiku-4.5
+ask: deepseek-v3.2-exp
+administrator: minimax-m2 
