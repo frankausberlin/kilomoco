@@ -33,7 +33,8 @@ def main(argv=None):
             return 1
     # Launch interactive TUI
     from .tui import launch_tui
-    return launch_tui()
+    launch_tui()
+    return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
