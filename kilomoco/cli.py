@@ -22,8 +22,16 @@ def main(argv=None):
         for name in sorted(profiles.keys()):
             print(name)
         return 0
-    # Placeholder for interactive TUI / apply behavior
-    print("kilomoco: interactive TUI not yet implemented. Use --list to see profiles.")
+    elif args.profile:
+        # Launch with specified profile
+        from .launcher import prepare_and_launch
+        try:
+            return prepare_and_launch(args.profile, workspace=args.workspace)
+        except (ValueError, RuntimeError) as e:
+            print(f"Error: {e}", file=sys.stderr)
+            return 1
+    # Placeholder for interactive TUI
+    print("kilomoco: interactive TUI not yet implemented. Use --list to see profiles or --profile <name> to launch with a specific profile.")
     return 0
 
 if __name__ == "__main__":
