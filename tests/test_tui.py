@@ -128,7 +128,10 @@ class TestMainScreen:
         mock_launch.side_effect = ValueError("Profile not found")
 
         screen = MainScreen()
-        await screen.launch_profile("invalid_profile")
+        
+        # Test that the exception is properly raised
+        with pytest.raises(ValueError, match="Profile not found"):
+            await screen.launch_profile("invalid_profile")
 
         mock_launch.assert_called_once_with("invalid_profile")
 
