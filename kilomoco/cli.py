@@ -31,9 +31,9 @@ def main(argv=None):
         except (ValueError, RuntimeError) as e:
             print(f"Error: {e}", file=sys.stderr)
             return 1
-    # Placeholder for interactive TUI
-    print("kilomoco: interactive TUI not yet implemented. Use --list to see profiles or --profile <id> to launch with a specific profile.")
-    return 0
+    # Launch interactive TUI
+    from .tui import launch_tui
+    return launch_tui()
 
 if __name__ == "__main__":
     raise SystemExit(main())

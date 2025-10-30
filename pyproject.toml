@@ -9,6 +9,8 @@ description = "TUI for managing kilo VS Code extension mode configurations"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
-dependencies = []
+dependencies = [
+    "PyYAML>=6.0"
+]
 [project.scripts]
 kilomoco = "kilomoco.cli:main"
