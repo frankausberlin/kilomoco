@@ -1,0 +1,30 @@
+"""Minimal CLI scaffolding for kilomoco.
+
+This file must provide a stable `main(argv=None)` entrypoint suitable for testing
+and for use as the console script specified in pyproject.toml.
+"""
+import argparse
+import sys
+from .config import default_profiles
+
+def build_parser():
+    parser = argparse.ArgumentParser(prog="kilomoco", description="Kilomoco - manage kilo VS Code extension mode configurations")
+    parser.add_argument("--list", action="store_true", help="List available profiles")
+    parser.add_argument("--profile", type=str, help="Name of profile to apply (placeholder)")
+    parser.add_argument("--workspace", type=str, help="Path to workspace (optional; placeholder for future use)")
+    return parser
+
+def main(argv=None):
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if args.list:
+        profiles = default_profiles()
+        for name in sorted(profiles.keys()):
+            print(name)
+        return 0
+    # Placeholder for interactive TUI / apply behavior
+    print("kilomoco: interactive TUI not yet implemented. Use --list to see profiles.")
+    return 0
+
+if __name__ == "__main__":
+    raise SystemExit(main())
